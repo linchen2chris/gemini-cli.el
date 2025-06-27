@@ -1,6 +1,6 @@
 # gemini-cli.el
 
-[gemini-cli](./gemini-cli.png)
+![gemini-cli](./gemini-cli.png)
 
 An Emacs interface for [Gemini CLI](https://blog.google/technology/developers/introducing-gemini-cli-open-source-ai-agent/), providing integration between Emacs and Gemini AI for coding assistance.
 
