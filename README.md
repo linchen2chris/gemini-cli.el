@@ -1,5 +1,7 @@
 # gemini-cli.el
 
+[gemini-cli](./gemini-cli.png)
+
 An Emacs interface for [Gemini CLI](https://blog.google/technology/developers/introducing-gemini-cli-open-source-ai-agent/), providing integration between Emacs and Gemini AI for coding assistance.
 
 ## Features
@@ -232,19 +234,6 @@ To reduce flickering in the Gemini buffer on window configuration changes, you c
 
 _Note_: Recent changes to gemini-cli.el have fixed flickering issues, making customization of these latency values less necessary. 
 
-## Demo
-
-### GIF Demo
-
-![Gemini Cli Emacs Demo](./demo.gif)
-
-This [demo](./demo.gif) shows gemini-cli.el in action, including accessing the transient menu, sending commands with file context, and fixing errors.
-
-### Video Demo
-
-[![The Emacs Gemini Cli Package](https://img.youtube.com/vi/K8sCVLmFyyU/0.jpg)](https://www.youtube.com/watch?v=K8sCVLmFyyU)
-
-Check out this [video demo](https://www.youtube.com/watch?v=K8sCVLmFyyU) demonstrating the gemini-cli.el package. This video was kindly created and shared by a user of the package.
 
 ## Limitations
 
