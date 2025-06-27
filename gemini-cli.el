@@ -1,10 +1,10 @@
 ;;; gemini-cli.el --- Gemini CLI Emacs integration -*- lexical-binding: t; -*-
 
-;; Author: Stephen Molitor <stevemolitor@gmail.com>
-;; Version: 0.2.0
+;; Author: Stephen Molitor <stevemolitor@gmail.com> and Lin Chen <lc1990linux@gmail.com>
+;; Version: 1.0.0
 ;; Package-Requires: ((emacs "30.0") (transient "0.7.5") (eat "0.9.2"))
 ;; Keywords: tools, ai
-;; URL: https://github.com/stevemolitor/gemini-cli.el
+;; URL: https://github.com/linchen2chris/gemini-cli.el
 
 ;;; Commentary:
 ;; An Emacs interface to Gemini CLI.  This package provides convenient

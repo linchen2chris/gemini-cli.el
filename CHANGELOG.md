@@ -2,6 +2,9 @@
 
 All notable changes to claude-code.el will be documented in this file.
 
+## [1.0.0]
+port claude code to gemini CLI
+
 ## [0.3.8]
 
 ### Added
@@ -155,5 +158,4 @@ All notable changes to claude-code.el will be documented in this file.
 - Removed prefix key customization in favor of manual key binding, fixes #2. 
 - Updated Makefile to disable sentence-end-double-space
 - Enhanced documentation for flycheck integration and build process
-
 
