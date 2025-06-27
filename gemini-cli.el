@@ -219,28 +219,17 @@ for each directory across multiple invocations.")
   "Gemini slash commands menu."
   ["Slash Commands"
    ["Basic Commands"
-    ("c" "Clear" (lambda () (interactive) (gemini-cli--do-send-command "/clear")))
-    ("o" "Compact" (lambda () (interactive) (gemini-cli--do-send-command "/compact")))
-    ("f" "Config" (lambda () (interactive) (gemini-cli--do-send-command "/config")))
-    ("t" "Cost" (lambda () (interactive) (gemini-cli--do-send-command "/cost")))
-    ("d" "Doctor" (lambda () (interactive) (gemini-cli--do-send-command "/doctor")))
-    ("x" "Exit" (lambda () (interactive) (gemini-cli--do-send-command "/exit")))
-    ("h" "Help" (lambda () (interactive) (gemini-cli--do-send-command "/help")))]
-
-   ["Special Commands"
-    ("i" "Init" (lambda () (interactive) (gemini-cli--do-send-command "/init")))
-    ("p" "PR" (lambda () (interactive) (gemini-cli--do-send-command "/pr")))
-    ("r" "Release" (lambda () (interactive) (gemini-cli--do-send-command "/release")))
-    ("b" "Bug" (lambda () (interactive) (gemini-cli--do-send-command "/bug")))
-    ("v" "Review" (lambda () (interactive) (gemini-cli--do-send-command "/review")))]
+    ("x" "Clear" (lambda () (interactive) (gemini-cli--do-send-command "/clear")))
+    ("o" "compress" (lambda () (interactive) (gemini-cli--do-send-command "/compress")))
+    ("c" "chat" (lambda () (interactive) (gemini-cli--do-send-command "/chat")))
+    ("!" "Shell" (lambda () (interactive) (gemini-cli--do-send-command "!")))
+    ("d" "Docs" (lambda () (interactive) (gemini-cli--do-send-command "/docs")))
+    ]
 
    ["Additional Commands"
-    ("e" "Terminal" (lambda () (interactive) (gemini-cli--do-send-command "/terminal")))
-    ("m" "Theme" (lambda () (interactive) (gemini-cli--do-send-command "/theme")))
-    ("v" "Vim" (lambda () (interactive) (gemini-cli--do-send-command "/vim")))
-    ("a" "Approved" (lambda () (interactive) (gemini-cli--do-send-command "/approved")))
-    ("l" "Logout" (lambda () (interactive) (gemini-cli--do-send-command "/logout")))
-    ("g" "Login" (lambda () (interactive) (gemini-cli--do-send-command "/login")))]
+    ("h" "Help" (lambda () (interactive) (gemini-cli--do-send-command "/help")))
+    ("q" "quit" (lambda () (interactive) (gemini-cli--do-send-command "/quit")))
+    ("m" "Theme" (lambda () (interactive) (gemini-cli--do-send-command "/theme")))]
    ])
 
 ;;;; Private util functions
