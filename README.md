@@ -1,20 +1,22 @@
-# claude-code.el
+# gemini-cli.el
 
-An Emacs interface for [Claude Code CLI](https://github.com/anthropics/claude-code), providing integration between Emacs and Claude AI for coding assistance.
+![gemini-cli](./gemini-cli.png)
+
+An Emacs interface for [Gemini CLI](https://blog.google/technology/developers/introducing-gemini-cli-open-source-ai-agent/), providing integration between Emacs and Gemini AI for coding assistance.
 
 ## Features
 
-- **Seamless Emacs Integration** - Start, manage, and interact with Claude without leaving Emacs
-- **Stay in Your Buffer** - Send code, regions, or commands to Claude while keeping your focus
-- **Fix Errors Instantly** - Point at a flycheck/flymake error and ask Claude to fix it
-- **Multiple Instances** - Run separate Claude sessions for different projects or tasks
-- **Quick Responses** - Answer Claude with a keystroke (<return>/<escape>/1/2/3) without switching buffers
-- **Smart Context** - Optionally include file paths and line numbers when sending commands to Claude
+- **Seamless Emacs Integration** - Start, manage, and interact with Gemini without leaving Emacs
+- **Stay in Your Buffer** - Send code, regions, or commands to Gemini while keeping your focus
+- **Fix Errors Instantly** - Point at a flycheck/flymake error and ask Gemini to fix it
+- **Multiple Instances** - Run separate Gemini sessions for different projects or tasks
+- **Quick Responses** - Answer Gemini with a keystroke (<return>/<escape>/1/2/3) without switching buffers
+- **Smart Context** - Optionally include file paths and line numbers when sending commands to Gemini
 - **Transient Menu** - Access all commands and slash commands through a transient menu
 - **Continue Conversations** - Resume previous sessions or fork to earlier points
 - **Read-Only Mode** - Toggle to select and copy text with normal Emacs commands and keybindings
 - **Mode Cycling** - Quick switch between default, auto-accept edits, and plan modes
-- **Desktop Notifications** - Get notified when Claude finishes processing
+- **Desktop Notifications** - Get notified when Gemini finishes processing
 - **Terminal Choice** - Works with both eat and vterm backends
 - **Fully Customizable** - Configure keybindings, notifications, and display preferences
 
@@ -23,7 +25,7 @@ An Emacs interface for [Claude Code CLI](https://github.com/anthropics/claude-co
 ### Prerequisites
 
 - Emacs 30.0 or higher
-- [Claude Code CLI](https://github.com/anthropics/claude-code) installed and configured
+- [Gemini CLI](https://github.com/google-gemini/gemini-cli) installed and configured
 - Required: transient (0.7.5+)
 - Optional: eat (0.9.2+) for eat backend, vterm for vterm backend
 
@@ -41,11 +43,11 @@ An Emacs interface for [Claude Code CLI](https://github.com/anthropics/claude-co
 ;; for vterm terminal backend:
 (use-package vterm :ensure t)
 
-;; install claude-code.el
-(use-package claude-code :ensure t
-  :vc (:url "https://github.com/stevemolitor/claude-code.el" :rev :newest)
-  :config (claude-code-mode)
-  :bind-keymap ("C-c c" . claude-code-command-map))
+;; install gemini-cli.el
+(use-package gemini-cli :ensure t
+  :vc (:url "https://github.com/linchen2chris/gemini-cli.el" :rev :newest)
+  :config (gemini-cli-mode)
+  :bind-keymap ("C-c c" . gemini-cli-command-map)) ;; or your preferred key
 ```
 
 ### Using straight.el
@@ -65,23 +67,27 @@ An Emacs interface for [Claude Code CLI](https://github.com/anthropics/claude-co
 ;; for vterm terminal backend:
 (use-package vterm :straight t)
 
-;; install claude-code.el, using :depth 1 to reduce download size:
-(use-package claude-code
-  :straight (:type git :host github :repo "stevemolitor/claude-code.el" :branch "main" :depth 1
-                   :files ("*.el" (:exclude "images/*")))
+(use-package gemini-cli
+  :straight (:type git :host github :repo "linchen2chris/gemini-cli.el" :branch "main"
+                   :files ("*.el" (:exclude "demo.gif")))
   :bind-keymap
-  ("C-c c" . claude-code-command-map) ;; or your preferred key
+  ("C-c c" . gemini-cli-command-map)
   :config
-  (claude-code-mode))
+  (gemini-cli-mode))
 ```
 
 ## Basic Usage
 
+<<<<<<< Updated upstream
 ### Setting Prefix Key
 You need to set your own key binding for the Claude Code command map, as described in the [Installation](#installation) section. The examples in this README use `C-c c` as the prefix key.
+=======
+You need to set your own key binding for the Gemini Cli command map. The examples in this README use `C-c c` as the prefix key.
+>>>>>>> Stashed changes
 
 ### Picking Eat or Vterm
 
+<<<<<<< Updated upstream
 By default claude-code.el uses the `eat` backend. If you prefer vterm customize
 `claude-code-terminal-backend`:
 
@@ -143,38 +149,123 @@ Sometimes you want to send a quick response to Claude without switching to the C
 - `claude-code-send-3` (`C-c c 3`) - send "3" to Claude
 
 ## Working with Multiple Claude Instances
+=======
+- `gemini-cli` (`C-c c c`) - Start Gemini. With prefix arg (`C-u`), switches to the Gemini buffer after creating. With double prefix (`C-u C-u`), continues previous conversation. With triple prefix (`C-u C-u C-u`), prompts for the project directory
+- `gemini-cli-toggle` (`C-c c t`) - Toggle Gemini window
+- `gemini-cli-switch-to-buffer` (`C-c c b`) - Switch to the Gemini buffer. With prefix arg (`C-u`), shows all Gemini instances across all directories
+- `gemini-cli-kill` (`C-c c k`) - Kill Gemini session. With prefix arg (`C-u`), kills ALL Gemini instances across all directories
+- `gemini-cli-send-command` (`C-c c s`) - Send command to Gemini
+- `gemini-cli-send-command-with-context` (`C-c c x`) - Send command with current file and line context
+- `gemini-cli-send-region` (`C-c c r`) - Send the current region or buffer to Gemini. With prefix arg (`C-u`), prompts for instructions to add to the text. With double prefix (`C-u C-u`), adds instructions and switches to Gemini buffer
+- `gemini-cli-fix-error-at-point` (`C-c c e`) - Ask Gemini to fix the error at the current point (works with flycheck, flymake, and any system that implements help-at-pt)
+- `gemini-cli-slash-commands` (`C-c c /`) - Access Gemini slash commands menu
+- `gemini-cli-transient` (`C-c c m`) - Show all commands (transient menu)
+- `gemini-cli-send-return` (`C-c c y`) - Send return key to Gemini (useful for confirming with Gemini without switching to the Gemini REPL buffer)
+- `gemini-cli-send-escape` (`C-c c n`) - Send escape key to Gemini (useful for saying "No" when Gemini asks for confirmation without switching to the Gemini REPL buffer)
+- `gemini-cli-fork` (`C-c c f`) - Fork conversation (jump to previous conversation by sending escape-escape to Gemini)
+- `gemini-cli-send-1` (`C-c c 1`) - Send "1" to Gemini (useful for selecting the first option when Gemini presents a numbered menu)
+- `gemini-cli-send-2` (`C-c c 2`) - Send "2" to Gemini (useful for selecting the second option when Gemini presents a numbered menu)
+- `gemini-cli-send-3` (`C-c c 3`) - Send "3" to Gemini (useful for selecting the third option when Gemini presents a numbered menu)
+- `gemini-cli-cycle-mode` (`C-c c TAB`) - Send Shift-Tab to Gemini to cycle between default mode, auto-accept edits mode, and plan mode
 
-`claude-code.el` supports running multiple Claude instances across different projects and directories. Each Claude instance is associated with a specific directory (project root, file directory, or current directory).
+With a single prefix arg, `gemini-cli`, `gemini-cli-send-command` and
+`gemini-cli-send-command-with-context` will switch to the Gemini terminal buffer after sending the
+command.
+
+
+
+### Read-Only Mode Toggle
+
+The `gemini-cli-toggle-read-only-mode` command provides a convenient way to switch between normal terminal mode and read-only mode in the Gemini buffer:
+
+- `gemini-cli-toggle-read-only-mode` - Toggle between read-only mode and normal mode
+
+In read-only mode, you can interact with the terminal buffer just like a regular Emacs buffer, making it easy to select and copy text. However, you cannot change the buffer contents or enter Gemini commands in this mode. This is particularly useful when you need to copy output from Gemini without accidentally modifying the terminal.
+
+The command automatically detects the current mode and switches to the other:
+- If in normal terminal mode (semi-char mode), it switches to read-only mode
+- If in read-only mode (emacs mode), it switches back to normal terminal mode
+
+### Continuing Previous Conversations
+
+The `gemini-cli` command supports continuing previous conversations using Gemini's `--continue`
+flag:
+
+- Double prefix arg (`C-u C-u C-c c c`) - Start Gemini and continue previous conversation
+
+This allows you to resume where you left off in your previous Gemini session.
+
+### Transient Menus
+
+Access all commands through the transient menu with `C-c c m`.
+
+#### Slash Commands Menu
+
+For quick access to Gemini slash commands like `/help`, `/clear`, or `/compact`, use `C-c c /` to open the slash commands menu.
+
+### Read-Only Mode for Text Selection
+
+In the Gemini terminal, you can switch to a read-only mode to select and copy text:
+
+- `C-c C-e` (`eat-emacs-mode`) - Switch to read-only mode with normal Emacs cursor for text selection
+- `C-c C-j` (`semi-char-mode`) - Return to normal terminal mode
+
+The cursor appearance in read-only mode can be customized via the `gemini-cli-read-only-mode-cursor-type` variable. This variable uses the format `(CURSOR-ON BLINKING-FREQUENCY CURSOR-OFF)`. For more information, run `M-x describe-variable RET gemini-cli-read-only-mode-cursor-type RET`.
+
+```elisp
+;; Customize cursor type in read-only mode (default is '(box nil nil))
+;; Cursor type options: 'box, 'hollow, 'bar, 'hbar, or nil
+(setq gemini-cli-read-only-mode-cursor-type '(bar nil nil))
+```
+
+### Multiple Gemini Instances
+>>>>>>> Stashed changes
+
+`gemini-cli.el` supports running multiple Gemini instances across different projects and directories. Each Gemini instance is associated with a specific directory (project root, file directory, or current directory).
 
 #### Instance Management
 
+<<<<<<< Updated upstream
 - When you start Claude with `claude-code`, it creates an instance for the current directory
 - If a Claude instance already exists for the directory, you'll be prompted to name the new instance (e.g., "tests", "docs")
 - You can also use `claude-code-new-instance` to explicitly create a new instance with a custom name
 - Buffer names follow the format:
   - `*claude:/path/to/directory:instance-name*` (e.g., `*claude:/home/user/project:tests*`)
 - If you're in a directory without a Claude instance but have instances running in other directories, you'll be prompted to select one
+=======
+- When you start Gemini with `gemini-cli`, it creates an instance for the current directory
+- If a Gemini instance already exists for the directory, you'll be prompted to name the new instance (e.g., "tests", "docs")
+- Buffer names follow the format:
+  - `*gemini:/path/to/directory*` for the default instance
+  - `*gemini:/path/to/directory:instance-name*` for named instances (e.g., `*gemini:/home/user/project:tests*`)
+- If you're in a directory without a Gemini instance but have instances running in other directories, you'll be prompted to select one
+>>>>>>> Stashed changes
 - Your selection is remembered for that directory, so you won't be prompted again
 
 ### Instance Selection
 
-Commands that operate on an instance (`claude-send-command`, `claude-code-switch-to-buffer`, `claude-code-kill`, etc.) will prompt you for the Claude instance if there is more than one instance associated with the current buffer's project.
+Commands that operate on an instance (`gemini-send-command`, `gemini-cli-switch-to-buffer`, `gemini-cli-kill`, etc.) will prompt you for the Gemini instance if there is more than one instance associated with the current buffer's project.
 
-If the buffer file is not associated with a running Claude instance, you can select an instance running in a different project. This is useful when you want Claude to analyze dependent projects or files that you have checked out in sibling directories.
+If the buffer file is not associated with a running Gemini instance, you can select an instance running in a different project. This is useful when you want Gemini to analyze dependent projects or files that you have checked out in sibling directories.
 
-Claude-code.el remembers which buffers are associated with which Claude instances, so you won't be repeatedly prompted. This association also helps claude-code.el "do the right thing" when killing a Claude process and deleting its associated buffer.
+Gemini-cli.el remembers which buffers are associated with which Gemini instances, so you won't be repeatedly prompted. This association also helps gemini-cli.el "do the right thing" when killing a Gemini process and deleting its associated buffer.
 
 ### Multiple Instances Per Directory
 
-You can run multiple Claude instances for the same directory to support different workflows:
+You can run multiple Gemini instances for the same directory to support different workflows:
 
 - The first instance in a directory is the "default" instance
 - Additional instances require a name when created (e.g., "tests", "docs", "refactor")
+<<<<<<< Updated upstream
 - When multiple instances exist for a directory, commands that interact with Claude will prompt you to select which instance to use
 - Use `C-u claude-code-switch-to-buffer` to see all Claude instances across all directories (not just the current directory)
 - Use `claude-code-select-buffer` as a dedicated command to always show all Claude instances across all directories
+=======
+- When multiple instances exist for a directory, commands that interact with Gemini will prompt you to select which instance to use
+- Use `C-u gemini-cli-switch-to-buffer` to see all Gemini instances across all directories (not just the current directory)
+>>>>>>> Stashed changes
 
-This allows you to have separate Claude conversations for different aspects of your work within the same project, such as one instance for writing code and another for writing tests.
+This allows you to have separate Gemini conversations for different aspects of your work within the same project, such as one instance for writing cli and another for writing tests.
 
 ## Working in the Claude Buffer
 
@@ -305,6 +396,7 @@ For Windows, you can use PowerShell to create toast notifications:
 ## Customization
 
 ```elisp
+<<<<<<< Updated upstream
 ;; Set your key binding for the command map.
 (global-set-key (kbd "C-c C-a") claude-code-command-map)
 
@@ -316,15 +408,29 @@ For Windows, you can use PowerShell to create toast notifications:
 ;; Change the path to the Claude executable (default is "claude").
 ;; Useful if Claude is not in your PATH or you want to use a specific version.
 (setq claude-code-program "/usr/local/bin/claude")
+=======
+;; Set your key binding for the command map
+(global-set-key (kbd "C-c C-a") gemini-cli-command-map)
 
-;; Set command line arguments for Claude
+;; Set terminal type for the Gemini terminal emulation (default is "xterm-256color")
+;; This determines terminal capabilities like color support
+;; See the documentation for eat-term-name for more information
+(setq gemini-cli-term-name "xterm-256color")
+
+;; Change the path to the Gemini executable (default is "gemini")
+;; Useful if Gemini is not in your PATH or you want to use a specific version
+(setq gemini-cli-program "/usr/local/bin/gemini")
+>>>>>>> Stashed changes
+
+;; Set command line arguments for Gemini
 ;; For example, to enable verbose output
-(setq claude-code-program-switches '("--verbose"))
+(setq gemini-cli-program-switches '("--verbose"))
 
-;; Add hooks to run after Claude is started
-(add-hook 'claude-code-start-hook 'my-claude-setup-function)
+;; Add hooks to run after Gemini is started
+(add-hook 'gemini-cli-start-hook 'my-gemini-setup-function)
 
 ;; Adjust initialization delay (default is 0.1 seconds)
+<<<<<<< Updated upstream
 ;; This helps prevent terminal layout issues if the buffer is displayed before Claude is fully ready.
 (setq claude-code-startup-delay 0.2)
 
@@ -374,15 +480,33 @@ For Windows, you can use PowerShell to create toast notifications:
 ;; when you run delete-other-windows or similar commands, keeping the
 ;; Claude buffer visible and accessible.
 (setq claude-code-no-delete-other-windows t)
+=======
+;; This helps prevent terminal layout issues if the buffer is displayed before Gemini is fully ready
+(setq gemini-cli-startup-delay 0.2)
+
+;; Configure the buffer size threshold for confirmation prompt (default is 100000 characters)
+;; If a buffer is larger than this threshold, gemini-cli-send-region will ask for confirmation
+;; before sending the entire buffer to Gemini
+(setq gemini-cli-large-buffer-threshold 100000)
+
+;; Disable truncation of Gemini output buffer (default is nil)
+;; When set to t, gemini-cli.el can output display content without truncation
+;; This is useful when working with large Gemini buffers
+(setq gemini-cli-never-truncate-gemini-buffer t)
+>>>>>>> Stashed changes
 ```
 
 ### Customizing Window Position
 
-You can control how the Claude Code window appears using Emacs' `display-buffer-alist`. For example, to make the Claude window appear in a persistent side window on the right side of your screen with 33% width:
+You can control how the Gemini Cli window appears using Emacs' `display-buffer-alist`. For example, to make the Gemini window appear in a persistent side window on the right side of your screen with 33% width:
 
 ```elisp
 (add-to-list 'display-buffer-alist
+<<<<<<< Updated upstream
                  '("^\\*claude"
+=======
+                 `("^\\*gemini"
+>>>>>>> Stashed changes
                    (display-buffer-in-side-window)
                    (side . right)
                    (window-width . 90)))
@@ -392,6 +516,7 @@ This layout works best on wide screens.
 
 ### Font Setup
 
+<<<<<<< Updated upstream
 Claude Code uses a lot of special unicode characters, and most common programming fonts don't include them all. To ensure that Claude renders special characters correctly in Emacs, you need to either use a font with really good unicode support, or set up fallback fonts for Emacs to use when your preferred font does not have a character. 
 
 ### Using System Fonts as Fallbacks
@@ -432,6 +557,9 @@ On Linux it might look like this:
 
 A cross-platform approach is to install a fixed-width font with really good unicode symbols support. 
 [JuliaMono](https://juliamono.netlify.app/) has excellent Unicode symbols support. To let the Claude Code buffer use Julia Mono for rendering Unicode characters while still using your default font for ASCII characters add this elisp code:
+=======
+Using a font with good Unicode support helps avoid flickering while Gemini Cli is rendering its thinking icons. [JuliaMono](https://juliamono.netlify.app/) has excellent Unicode symbols support. To let the Gemini Cli buffer use Julia Mono for rendering Unicode characters while still using your default font for ASCII characters add this elisp code:
+>>>>>>> Stashed changes
 
 ```elisp
 (setq use-default-font-for-symbols nil)
@@ -441,30 +569,36 @@ A cross-platform approach is to install a fixed-width font with really good unic
 (set-fontset-font t 'symbol "Maple Mono" nil 'prepend)
 ```
 
+<<<<<<< Updated upstream
 ### Using a Custom Claude Code Font
 
 If instead you want to use a particular font just for the Claude Code REPL but use a different font
 everywhere else you can customize the `claude-code-repl-face`:
+=======
+If instead you want to use a particular font just for the Gemini Cli REPL but use a different font
+everywhere else you can customize the `gemini-cli-repl-face`:
+>>>>>>> Stashed changes
 
 ```elisp
 (custom-set-faces
-   '(claude-code-repl-face ((t (:family "JuliaMono")))))
+   '(gemini-cli-repl-face ((t (:family "JuliaMono")))))
 ```
 
 (If you set the Claude Code font to "JuliaMono", you can skip all the fontset fallback configurations above.)
 
 ### Reducing Flickering on Window Configuration Changes
 
-To reduce flickering in the Claude buffer on window configuration changes, you can adjust eat latency variables in a hook. This reduces flickering at the cost of some increased latency:
+To reduce flickering in the Gemini buffer on window configuration changes, you can adjust eat latency variables in a hook. This reduces flickering at the cost of some increased latency:
 
 ```elisp
   ;; reduce flickering
-  (add-hook 'claude-code-start-hook
+  (add-hook 'gemini-cli-start-hook
             (lambda ()
               (setq-local eat-minimum-latency 0.033
                           eat-maximum-latency 0.1)))
 ```
 
+<<<<<<< Updated upstream
 *Note*: Recent changes to claude-code.el have fixed flickering issues, making customization of these latency values less necessary. 
 
 ### Fixing Spaces Between Vertical Bars
@@ -498,9 +632,14 @@ This [demo](./demo.gif) shows claude-code.el in action, including accessing the 
 [![The Emacs Claude Code Package](https://img.youtube.com/vi/K8sCVLmFyyU/0.jpg)](https://www.youtube.com/watch?v=K8sCVLmFyyU)
 
 Check out this [video demo](https://www.youtube.com/watch?v=K8sCVLmFyyU) demonstrating the claude-code.el package. This video was kindly created and shared by a user of the package.
+=======
+_Note_: Recent changes to gemini-cli.el have fixed flickering issues, making customization of these latency values less necessary. 
+
+>>>>>>> Stashed changes
 
 ### Eat-specific Customization
 
+<<<<<<< Updated upstream
 When using the eat terminal backend, there are additional customization options available:
 
 ```elisp
@@ -575,6 +714,9 @@ This is particularly useful if you like to keep Claude in a narrow side window w
 The `vterm-timer-delay` variable controls how often vterm refreshes its buffer when receiving data. This delay (in seconds) helps manage performance when processing large amounts of output. Setting it to `nil` disables the delay entirely.
 
 The default value of `0.1` seconds works well with Claude Code. Since Claude often sends large bursts of data when generating code or explanations, reducing this delay or disabling it (`nil`) can significantly degrade performance. Stick with the default, or use a slightly higher value  unless you experience specific display issues. 
+=======
+- `gemini-cli.el` only supports using [eat](https://codeberg.org/akib/emacs-eat) for the Gemini Cli terminal window. Eat provides better rendering with less flickering and visual artifacts compared to other terminal emulators like ansi-term and vterm in testing.
+>>>>>>> Stashed changes
 
 ## Contributing
 
