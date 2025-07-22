@@ -1514,7 +1514,7 @@ If the Gemini buffer doesn't exist, create it."
     (if gemini-cli-buffer
         (if (get-buffer-window gemini-cli-buffer)
             (delete-window (get-buffer-window gemini-cli-buffer))
-          (let ((window (display-buffer gemini-cli-buffer '((display-buffer-below-selected)))))
+          (let ((window (display-buffer-in-side-window gemini-cli-buffer '((side . right)))))
             ;; set no-delete-other-windows parameter for gemini-cli window
             (set-window-parameter window 'no-delete-other-windows gemini-cli-no-delete-other-windows)))
       (gemini-cli--show-not-running-message))))
