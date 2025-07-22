@@ -382,26 +382,17 @@ for each directory across multiple invocations.")
    ["Basic Commands"
     ("c" "Clear" (lambda () (interactive) (gemini-cli--do-send-command "/clear")))
     ("o" "Compress" (lambda () (interactive) (gemini-cli--do-send-command "/compress")))
-    ("f" "Config" (lambda () (interactive) (gemini-cli--do-send-command "/config")))
-    ("t" "Cost" (lambda () (interactive) (gemini-cli--do-send-command "/cost")))
-    ("d" "Doctor" (lambda () (interactive) (gemini-cli--do-send-command "/doctor")))
-    ("x" "Quit" (lambda () (interactive) (gemini-cli--do-send-command "/quit")))
+    ("q" "Quit" (lambda () (interactive) (gemini-cli--do-send-command "/quit")))
     ("h" "Help" (lambda () (interactive) (gemini-cli--do-send-command "/help")))]
 
    ["Special Commands"
-    ("i" "Init" (lambda () (interactive) (gemini-cli--do-send-command "/init")))
-    ("p" "PR" (lambda () (interactive) (gemini-cli--do-send-command "/pr")))
-    ("r" "Release" (lambda () (interactive) (gemini-cli--do-send-command "/release")))
-    ("b" "Bug" (lambda () (interactive) (gemini-cli--do-send-command "/bug")))
-    ("v" "Review" (lambda () (interactive) (gemini-cli--do-send-command "/review")))]
+    ("l" "Chat List" (lambda () (interactive) (gemini-cli--do-send-command "/chat list")))
+    ("s" "Chat Save" (lambda () (interactive) (gemini-cli--do-send-command "/chat save")))
+    ("r" "Chat Resume" (lambda () (interactive) (gemini-cli--do-send-command "/chat resume")))]
 
    ["Additional Commands"
-    ("e" "Terminal" (lambda () (interactive) (gemini-cli--do-send-command "/terminal")))
-    ("m" "Theme" (lambda () (interactive) (gemini-cli--do-send-command "/theme")))
-    ("v" "Vim" (lambda () (interactive) (gemini-cli--do-send-command "/vim")))
-    ("a" "Approved" (lambda () (interactive) (gemini-cli--do-send-command "/approved")))
-    ("l" "Logout" (lambda () (interactive) (gemini-cli--do-send-command "/logout")))
-    ("g" "Login" (lambda () (interactive) (gemini-cli--do-send-command "/login")))]
+    ("!" "Shell" (lambda () (interactive) (gemini-cli--do-send-command "!")))
+    ("m" "Theme" (lambda () (interactive) (gemini-cli--do-send-command "/theme")))]
    ])
 
 ;;;; Terminal abstraction layer
