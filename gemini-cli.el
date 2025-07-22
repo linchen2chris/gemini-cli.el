@@ -1102,6 +1102,7 @@ Returns the selected Gemini buffer or nil."
       (progn
         (with-current-buffer gemini-cli-buffer
           (gemini-cli--term-send-string gemini-cli-terminal-backend cmd)
+          (sleep-for 0.1)
           (gemini-cli--term-send-string gemini-cli-terminal-backend (kbd "RET"))
           (display-buffer gemini-cli-buffer))
         gemini-cli-buffer)
