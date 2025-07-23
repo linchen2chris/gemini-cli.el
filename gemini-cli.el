@@ -1202,7 +1202,7 @@ With double prefix ARG (\\[universal-argument] \\[universal-argument]), prompt f
       (setq-local vertical-scroll-bar nil)
 
       ;; Display buffer, setting window parameters
-      (let ((window (display-buffer-in-side-window buffer '((side . right)(window-width . 80)))))
+      (let ((window (display-buffer-in-side-window buffer '((side . right)(window-width . 0.4)))))
         (when window
           ;; turn off fringes and margins in the Gemini buffer
           (set-window-parameter window 'left-margin-width 0)
@@ -1524,7 +1524,7 @@ If the Gemini buffer doesn't exist, create it."
     (if gemini-cli-buffer
         (if (get-buffer-window gemini-cli-buffer)
             (delete-window (get-buffer-window gemini-cli-buffer))
-      (let ((window (display-buffer-in-side-window gemini-cli-buffer '((side . right)(window-width . 80)))))
+      (let ((window (display-buffer-in-side-window gemini-cli-buffer '((side . right)(window-width . 0.4)))))
             ;; set no-delete-other-windows parameter for gemini-cli window
             (set-window-parameter window 'no-delete-other-windows gemini-cli-no-delete-other-windows)))
       (gemini-cli--show-not-running-message))))
