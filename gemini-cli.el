@@ -311,6 +311,7 @@ for each directory across multiple invocations.")
 (defvar gemini-cli-command-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "/") 'gemini-cli-slash-commands)
+    (define-key map (kbd "!") 'gemini-cli-send-shell)
     (define-key map (kbd "b") 'gemini-cli-switch-to-buffer)
     (define-key map (kbd "B") 'gemini-cli-select-buffer)
     (define-key map (kbd "c") 'gemini-cli)
@@ -400,7 +401,7 @@ for each directory across multiple invocations.")
     ("f" "Memory Refresh" (lambda () (interactive) (gemini-cli--do-send-command "/memory refresh")))]
 
    ["Additional Commands"
-    ("!" "Shell" (lambda () (interactive) (gemini-cli--do-send-command "!")))
+    ("!" "Shell" (lambda () (interactive) (call-interactively 'gemini-cli-send-shell)))
     ("@" "Add Context" (lambda () (interactive) (gemini-cli--do-send-command "@")))]
    ])
 
@@ -1615,6 +1616,19 @@ directories, allowing you to choose which one to switch to."
 With prefix ARG, switch to the Gemini buffer after sending CMD."
   (interactive "sGemini command: \nP")
   (let ((selected-buffer (gemini-cli--do-send-command cmd)))
+    (when (and arg selected-buffer)
+      (pop-to-buffer selected-buffer))))
+
+;;;###autoload
+(defun gemini-cli-send-shell (cmd &optional arg)
+  "Read a Gemini command from the minibuffer and send it.
+
+With prefix ARG, switch to the Gemini buffer after sending CMD."
+  (interactive "sGemini command: !\nP")
+  (let ((selected-buffer (gemini-cli--do-send-command (concat "!" cmd))))
+    (when selected-buffer
+      (with-current-buffer selected-buffer
+        (gemini-cli--do-send-command "!")))
     (when (and arg selected-buffer)
       (pop-to-buffer selected-buffer))))
 
