@@ -380,19 +380,28 @@ for each directory across multiple invocations.")
   "Gemini slash commands menu."
   ["Slash Commands"
    ["Basic Commands"
+    ("b" "Bug" (lambda () (interactive) (gemini-cli--do-send-command "/bug")))
     ("c" "Clear" (lambda () (interactive) (gemini-cli--do-send-command "/clear")))
+    ("d" "Docs" (lambda () (interactive) (gemini-cli--do-send-command "/docs")))
+    ("e" "Extensions" (lambda () (interactive) (gemini-cli--do-send-command "/extensions")))
+    ("m" "Mcp" (lambda () (interactive) (gemini-cli--do-send-command "/mcp")))
     ("o" "Compress" (lambda () (interactive) (gemini-cli--do-send-command "/compress")))
+    ("p" "Privacy" (lambda () (interactive) (gemini-cli--do-send-command "/Privacy")))
+    ("t" "Tools" (lambda () (interactive) (gemini-cli--do-send-command "/tools")))
     ("q" "Quit" (lambda () (interactive) (gemini-cli--do-send-command "/quit")))
     ("h" "Help" (lambda () (interactive) (gemini-cli--do-send-command "/help")))]
 
    ["Special Commands"
     ("l" "Chat List" (lambda () (interactive) (gemini-cli--do-send-command "/chat list")))
     ("s" "Chat Save" (lambda () (interactive) (gemini-cli--do-send-command "/chat save")))
-    ("r" "Chat Resume" (lambda () (interactive) (gemini-cli--do-send-command "/chat resume")))]
+    ("r" "Chat Resume" (lambda () (interactive) (gemini-cli--do-send-command "/chat resume")))
+    ("w" "Memory Show" (lambda () (interactive) (gemini-cli--do-send-command "/memory show")))
+    ("a" "Memory Add" (lambda () (interactive) (gemini-cli--do-send-command "/memory add")))
+    ("f" "Memory Refresh" (lambda () (interactive) (gemini-cli--do-send-command "/memory refresh")))]
 
    ["Additional Commands"
     ("!" "Shell" (lambda () (interactive) (gemini-cli--do-send-command "!")))
-    ("m" "Theme" (lambda () (interactive) (gemini-cli--do-send-command "/theme")))]
+    ("@" "Add Context" (lambda () (interactive) (gemini-cli--do-send-command "@")))]
    ])
 
 ;;;; Terminal abstraction layer
