@@ -750,7 +750,7 @@ _BACKEND is the terminal backend type (should be \\='vterm)."
   ;; (setq-local vterm-timer-delay nil)
   ;; Increase process read buffering to batch more updates together
   (when-let ((proc (get-buffer-process (current-buffer))))
-    (set-process-query-on-quit-flag proc nil)
+    (set-process-query-on-exit-flag proc nil)
     ;; Try to make vterm read larger chunks at once
     (process-put proc 'read-output-max 4096))
   ;; Set up bell detection advice
@@ -1766,15 +1766,15 @@ regular buffer. This mode is useful for selecting text in the Gemini
 buffer. However, you are not allowed to change the buffer contents or
 enter Gemini commands.
 
-Use `gemini-cli-quit-read-only-mode' to switch back to normal mode."
+Use `gemini-cli-exit-read-only-mode' to switch back to normal mode."
   (interactive)
   (gemini-cli--with-buffer
    (gemini-cli--term-read-only-mode gemini-cli-terminal-backend)
    (message "Gemini read-only mode enabled")))
 
 ;;;###autoload
-(defun gemini-cli-quit-read-only-mode ()
-  "Quit read-only mode and return to normal mode (eat semi-char mode)."
+(defun gemini-cli-exit-read-only-mode ()
+  "Exit read-only mode and return to normal mode (eat semi-char mode)."
   (interactive)
   (gemini-cli--with-buffer
    (gemini-cli--term-interactive-mode gemini-cli-terminal-backend)
@@ -1792,7 +1792,7 @@ enter Gemini commands."
   (gemini-cli--with-buffer
    (if (not (gemini-cli--term-in-read-only-p gemini-cli-terminal-backend))
        (gemini-cli-read-only-mode)
-     (gemini-cli-quit-read-only-mode))))
+     (gemini-cli-exit-read-only-mode))))
 
 ;;;; Mode definition
 ;;;###autoload
