@@ -17,6 +17,7 @@
 (require 'project)
 (require 'cl-lib)
 (require 'popup)
+(require 'projectile)
 
 ;;;; Customization options
 (defgroup gemini-cli nil
@@ -313,10 +314,12 @@ for each directory across multiple invocations.")
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "/") 'gemini-cli-slash-commands-popup)
     (define-key map (kbd "!") 'gemini-cli-send-shell)
+    (define-key map (kbd "a") 'gemini-cli-add-context)
     (define-key map (kbd "b") 'gemini-cli-switch-to-buffer)
     (define-key map (kbd "B") 'gemini-cli-select-buffer)
     (define-key map (kbd "c") 'gemini-cli)
     (define-key map (kbd "C") 'gemini-cli-continue)
+    (define-key map (kbd "RET") 'gemini-cli-quick-response)
     (define-key map (kbd "R") 'gemini-cli-resume)
     (define-key map (kbd "i") 'gemini-cli-new-instance)
     (define-key map (kbd "d") 'gemini-cli-start-in-directory)
@@ -376,10 +379,38 @@ for each directory across multiple invocations.")
     ("2" "Send \"2\"" gemini-cli-send-2)
     ("3" "Send \"3\"" gemini-cli-send-3)
     ]])
+
+;;;; add files to context
+(defun gemini-cli-add-context ()
+  "Add FILE to Gemini context."
+        (interactive)
+        (let ((file (projectile-completing-read "Add file to Gemini: "
+                                               (projectile-project-files (projectile-acquire-root)))))
+        (gemini-cli--do-send-command (concat "@" file))))
+
+(defun gemini-cli-quick-response ()
+  "Send a quick response to Gemini."
+(interactive)
+(let ((response (popup-menu* '("Yes" "No" "1" "2" "3"))))
+(cond
+         ((equal response "Yes")
+          (gemini-cli-send-return))
+         ((equal response "No")
+          (gemini-cli-send-escape))
+         ((equal response "1")
+          (gemini-cli-send-1))
+         ((equal response "2")
+          (gemini-cli-send-2))
+         ((equal response "3")
+          (gemini-cli-send-3))
+         (t
+          (message "Unknown response: %s" response)))))
+
+;;;; Slash Commands with popup menu
 (defun gemini-cli-slash-commands-popup ()
   "Display the Gemini slash commands menu."
   (interactive)
-  (setq slash-cmd (popup-cascade-menu '("/bug"
+  (let ((slash-cmd (popup-cascade-menu '("/bug"
                                         "/about"
                                         "/auth"
                                         "/bug"
@@ -397,9 +428,9 @@ for each directory across multiple invocations.")
                                         "/quit"
                                         ("/stats" "/stats model" "/stats tools")
                                         "/theme"
-                                        "/tools")))
-  (gemini-cli--do-send-command slash-cmd)
-  )
+                                        "/tools")))))
+  (gemini-cli--do-send-command slash-cmd))
+
 ;;;###autoload (autoload 'gemini-cli-slash-commands "gemini-cli" nil t)
 (transient-define-prefix gemini-cli-slash-commands ()
   "Gemini slash commands menu."
@@ -411,7 +442,7 @@ for each directory across multiple invocations.")
     ("e" "Extensions" (lambda () (interactive) (gemini-cli--do-send-command "/extensions")))
     ("m" "Mcp" (lambda () (interactive) (gemini-cli--do-send-command "/mcp")))
     ("o" "Compress" (lambda () (interactive) (gemini-cli--do-send-command "/compress")))
-    ("p" "Privacy" (lambda () (interactive) (gemini-cli--do-send-command "/Privacy")))
+    ("p" "Privacy" (lambda () (interactive) (gemini-cli--do-send-command "/privacy")))
     ("t" "Tools" (lambda () (interactive) (gemini-cli--do-send-command "/tools")))
     ("q" "Quit" (lambda () (interactive) (gemini-cli--do-send-command "/quit")))
     ("h" "Help" (lambda () (interactive) (gemini-cli--do-send-command "/help")))]
@@ -1639,8 +1670,8 @@ directories, allowing you to choose which one to switch to."
 
 With prefix ARG, switch to the Gemini buffer after sending CMD."
   (interactive)
-  (setq cmd (completing-read "Gemini Command: " '() nil nil nil nil ""))
-  (let ((selected-buffer (gemini-cli--do-send-command cmd)))
+  (let ((cmd (completing-read "Gemini Command: " '() nil nil nil nil ""))
+        (selected-buffer (gemini-cli--do-send-command cmd)))
     (when (and arg selected-buffer)
       (pop-to-buffer selected-buffer))))
 
