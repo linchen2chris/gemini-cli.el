@@ -16,6 +16,7 @@
 (require 'transient)
 (require 'project)
 (require 'cl-lib)
+(require 'popup)
 
 ;;;; Customization options
 (defgroup gemini-cli nil
@@ -310,7 +311,7 @@ for each directory across multiple invocations.")
 ;;;###autoload (autoload 'gemini-cli-command-map "gemini-cli")
 (defvar gemini-cli-command-map
   (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "/") 'gemini-cli-slash-commands)
+    (define-key map (kbd "/") 'gemini-cli-slash-commands-popup)
     (define-key map (kbd "!") 'gemini-cli-send-shell)
     (define-key map (kbd "b") 'gemini-cli-switch-to-buffer)
     (define-key map (kbd "B") 'gemini-cli-select-buffer)
@@ -360,7 +361,7 @@ for each directory across multiple invocations.")
     ("o" "Send buffer file" gemini-cli-send-buffer-file)
     ("e" "Fix error at point" gemini-cli-fix-error-at-point)
     ("f" "Fork conversation" gemini-cli-fork)
-    ("/" "Slash Commands" gemini-cli-slash-commands)]
+    ("/" "Slash Commands" gemini-cli-slash-commands-popup)]
    ["Manage Gemini"
     ("t" "Toggle gemini window" gemini-cli-toggle)
     ("b" "Switch to Gemini buffer" gemini-cli-switch-to-buffer)
@@ -375,7 +376,30 @@ for each directory across multiple invocations.")
     ("2" "Send \"2\"" gemini-cli-send-2)
     ("3" "Send \"3\"" gemini-cli-send-3)
     ]])
-
+(defun gemini-cli-slash-commands-popup ()
+  "Display the Gemini slash commands menu."
+  (interactive)
+  (setq slash-cmd (popup-cascade-menu '("/bug"
+                                        "/about"
+                                        "/auth"
+                                        "/bug"
+                                        ("/chat" "/chat list" "/chat save" "/chat resume")
+                                        "/clear"
+                                        "/compress"
+                                        "/corgi"
+                                        "/docs"
+                                        "/editor"
+                                        "/extensions"
+                                        "/help"
+                                        "/mcp"
+                                        ("/memory" "/memory show""/memory add" "/memory refresh")
+                                        "/privacy"
+                                        "/quit"
+                                        ("/stats" "/stats model" "/stats tools")
+                                        "/theme"
+                                        "/tools")))
+  (gemini-cli--do-send-command slash-cmd)
+  )
 ;;;###autoload (autoload 'gemini-cli-slash-commands "gemini-cli" nil t)
 (transient-define-prefix gemini-cli-slash-commands ()
   "Gemini slash commands menu."
