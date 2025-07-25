@@ -1,6 +1,6 @@
 # gemini-cli.el
 
-![gemini-cli](./gemini-cli.png)
+![gemini-cli](./images/gemini-cli.png)
 
 An Emacs interface for [Gemini CLI](https://blog.google/technology/developers/introducing-gemini-cli-open-source-ai-agent/), providing integration between Emacs and Gemini AI for coding assistance.
 
@@ -19,6 +19,11 @@ An Emacs interface for [Gemini CLI](https://blog.google/technology/developers/in
 - **Desktop Notifications** - Get notified when Gemini finishes processing
 - **Terminal Choice** - Works with both eat and vterm backends
 - **Fully Customizable** - Configure keybindings, notifications, and display preferences
+- **Focus Mode(Experimental)** - Popup Branch will utilize popup ability, keep your focus on your cursor, without look down to minibuffer
+
+![send-command](./images/send-command.png)
+![slash-command](./images/slash-command.png)
+![quick-response](./images/quick-response.png)
 
 ## Installation {#installation}
 
