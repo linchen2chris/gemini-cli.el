@@ -391,7 +391,14 @@ for each directory across multiple invocations.")
 (defun gemini-cli-quick-response ()
   "Send a quick response to Gemini."
 (interactive)
-(let ((response (popup-menu* '("Yes" "No" "1" "2" "3"))))
+(let ((response (x-popup-menu t (list "What action?"
+                                      (cons ""
+                                            '(("Yes (retrun)" . "Yes")
+                                              ("No (esc)" . "No")
+                                              "--"
+                                              ("select 1" . "1")
+                                              ("Select 2" . "2")
+                                              ("Select 3" . "3")))))))
 (cond
          ((equal response "Yes")
           (gemini-cli-send-return))
