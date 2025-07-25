@@ -1610,11 +1610,12 @@ directories, allowing you to choose which one to switch to."
   (gemini-cli--kill-all-instances))
 
 ;;;###autoload
-(defun gemini-cli-send-command (cmd &optional arg)
+(defun gemini-cli-send-command (&optional arg)
   "Read a Gemini command from the minibuffer and send it.
 
 With prefix ARG, switch to the Gemini buffer after sending CMD."
-  (interactive "sGemini command: \nP")
+  (interactive)
+  (setq cmd (completing-read "Gemini Command: " '() nil nil nil nil ""))
   (let ((selected-buffer (gemini-cli--do-send-command cmd)))
     (when (and arg selected-buffer)
       (pop-to-buffer selected-buffer))))
