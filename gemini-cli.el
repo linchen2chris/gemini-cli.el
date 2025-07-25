@@ -428,8 +428,8 @@ for each directory across multiple invocations.")
                                         "/quit"
                                         ("/stats" "/stats model" "/stats tools")
                                         "/theme"
-                                        "/tools")))))
-  (gemini-cli--do-send-command slash-cmd))
+                                        "/tools"))))
+  (gemini-cli--do-send-command slash-cmd)))
 
 ;;;###autoload (autoload 'gemini-cli-slash-commands "gemini-cli" nil t)
 (transient-define-prefix gemini-cli-slash-commands ()
@@ -1670,8 +1670,8 @@ directories, allowing you to choose which one to switch to."
 
 With prefix ARG, switch to the Gemini buffer after sending CMD."
   (interactive)
-  (let ((cmd (completing-read "Gemini Command: " '() nil nil nil nil ""))
-        (selected-buffer (gemini-cli--do-send-command cmd)))
+  (let ((selected-buffer (gemini-cli--do-send-command
+                          (completing-read "Gemini Command: " '() nil nil nil nil ""))))
     (when (and arg selected-buffer)
       (pop-to-buffer selected-buffer))))
 
