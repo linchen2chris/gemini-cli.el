@@ -51,6 +51,37 @@
   :type 'hook
   :group 'gemini-cli)
 
+(defcustom gemini-cli-slash-commands
+  '(
+    "/about"
+    "/auth"
+    "/bug"
+    ("/chat" "/chat list" "/chat save" "/chat resume")
+    "/clear"
+    "/compress"
+    "/copy"
+    "/docs"
+    ("/directory" "/directory add" "/directory show")
+    "/editor"
+    "/extensions"
+    "/help"
+    "/ide"
+    "/init"
+    ("/mcp" "/mcp list" "/mcp auth" "/mcp refresh")
+    ("/memory" "/memory show""/memory add" "/memory refresh")
+    "/privacy"
+    "/quit"
+    ("/stats" "/stats model" "/stats tools")
+    "/theme"
+    "/tools"
+    "/settings"
+    "/vim"
+    "/setup-github"
+    "/terminal-setup")
+  "List of slash commands available in Gemini."
+:type '(repeat (choice string (repeat string)))
+:group 'gemini-cli)
+
 (defcustom gemini-cli-startup-delay 0.1
   "Delay in seconds after starting Gemini before displaying buffer.
 
@@ -409,55 +440,8 @@ for each directory across multiple invocations.")
 (defun gemini-cli-slash-commands-popup ()
   "Display the Gemini slash commands menu."
   (interactive)
-  (let ((slash-cmd (popup-cascade-menu '("/bug"
-                                        "/about"
-                                        "/auth"
-                                        "/bug"
-                                        ("/chat" "/chat list" "/chat save" "/chat resume")
-                                        "/clear"
-                                        "/compress"
-                                        "/corgi"
-                                        "/docs"
-                                        "/editor"
-                                        "/extensions"
-                                        "/help"
-                                        "/mcp"
-                                        ("/memory" "/memory show""/memory add" "/memory refresh")
-                                        "/privacy"
-                                        "/quit"
-                                        ("/stats" "/stats model" "/stats tools")
-                                        "/theme"
-                                        "/tools"))))
+  (let ((slash-cmd (popup-cascade-menu  gemini-cli-slash-commands)))
   (gemini-cli--do-send-command slash-cmd)))
-
-;;;###autoload (autoload 'gemini-cli-slash-commands "gemini-cli" nil t)
-(transient-define-prefix gemini-cli-slash-commands ()
-  "Gemini slash commands menu."
-  ["Slash Commands"
-   ["Basic Commands"
-    ("b" "Bug" (lambda () (interactive) (gemini-cli--do-send-command "/bug")))
-    ("c" "Clear" (lambda () (interactive) (gemini-cli--do-send-command "/clear")))
-    ("d" "Docs" (lambda () (interactive) (gemini-cli--do-send-command "/docs")))
-    ("e" "Extensions" (lambda () (interactive) (gemini-cli--do-send-command "/extensions")))
-    ("m" "Mcp" (lambda () (interactive) (gemini-cli--do-send-command "/mcp")))
-    ("o" "Compress" (lambda () (interactive) (gemini-cli--do-send-command "/compress")))
-    ("p" "Privacy" (lambda () (interactive) (gemini-cli--do-send-command "/privacy")))
-    ("t" "Tools" (lambda () (interactive) (gemini-cli--do-send-command "/tools")))
-    ("q" "Quit" (lambda () (interactive) (gemini-cli--do-send-command "/quit")))
-    ("h" "Help" (lambda () (interactive) (gemini-cli--do-send-command "/help")))]
-
-   ["Special Commands"
-    ("l" "Chat List" (lambda () (interactive) (gemini-cli--do-send-command "/chat list")))
-    ("s" "Chat Save" (lambda () (interactive) (gemini-cli--do-send-command "/chat save")))
-    ("r" "Chat Resume" (lambda () (interactive) (gemini-cli--do-send-command "/chat resume")))
-    ("w" "Memory Show" (lambda () (interactive) (gemini-cli--do-send-command "/memory show")))
-    ("a" "Memory Add" (lambda () (interactive) (gemini-cli--do-send-command "/memory add")))
-    ("f" "Memory Refresh" (lambda () (interactive) (gemini-cli--do-send-command "/memory refresh")))]
-
-   ["Additional Commands"
-    ("!" "Shell" (lambda () (interactive) (call-interactively 'gemini-cli-send-shell)))
-    ("@" "Add Context" (lambda () (interactive) (gemini-cli--do-send-command "@")))]
-   ])
 
 ;;;; Terminal abstraction layer
 ;; This layer abstracts terminal operations to support multiple backends (eat, vterm, etc.)
