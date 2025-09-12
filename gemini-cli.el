@@ -338,6 +338,7 @@ for each directory across multiple invocations.")
     (define-key map (kbd "1") 'gemini-cli-send-1)
     (define-key map (kbd "2") 'gemini-cli-send-2)
     (define-key map (kbd "3") 'gemini-cli-send-3)
+    (define-key map (kbd "4") 'gemini-cli-send-4)
     (define-key map (kbd "M") 'gemini-cli-cycle-mode)
     (define-key map (kbd "o") 'gemini-cli-send-buffer-file)
     map)
@@ -391,25 +392,16 @@ for each directory across multiple invocations.")
 (defun gemini-cli-quick-response ()
   "Send a quick response to Gemini."
 (interactive)
-(let ((response (x-popup-menu t (list "What action?"
-                                      (cons ""
-                                            '(("Yes (retrun)" . "Yes")
-                                              ("No (esc)" . "No")
-                                              "--"
-                                              ("select 1" . "1")
-                                              ("Select 2" . "2")
-                                              ("Select 3" . "3")))))))
+(let ((response (read-number "choose(1, 2, 3 or 4):" 1)))
 (cond
-         ((equal response "Yes")
-          (gemini-cli-send-return))
-         ((equal response "No")
-          (gemini-cli-send-escape))
-         ((equal response "1")
+         ((equal response 1)
           (gemini-cli-send-1))
-         ((equal response "2")
+         ((equal response 2)
           (gemini-cli-send-2))
-         ((equal response "3")
+         ((equal response 3)
           (gemini-cli-send-3))
+         ((equal response 4)
+          (gemini-cli-send-4))
          (t
           (message "Unknown response: %s" response)))))
 
@@ -1747,6 +1739,14 @@ This selects the second option when Gemini presents a numbered menu."
 This selects the third option when Gemini presents a numbered menu."
   (interactive)
   (gemini-cli--do-send-command "3"))
+
+;;;###autoload
+(defun gemini-cli-send-4 ()
+  "Send \"4\" to the Gemini CLI REPL.
+
+This selects the third option when Gemini presents a numbered menu."
+  (interactive)
+  (gemini-cli--do-send-command "4"))
 
 ;;;###autoload
 (defun gemini-cli-send-escape ()
