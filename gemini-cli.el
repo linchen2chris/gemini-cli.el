@@ -405,11 +405,10 @@ for each directory across multiple invocations.")
     ("M" "Cycle Gemini mode" gemini-cli-cycle-mode :transient t)
     ]
    ["Quick Responses"
-    ("y" "Send <return>" gemini-cli-send-return)
-    ("n" "Send <escape>" gemini-cli-send-escape)
     ("1" "Send \"1\"" gemini-cli-send-1)
     ("2" "Send \"2\"" gemini-cli-send-2)
     ("3" "Send \"3\"" gemini-cli-send-3)
+    ("4" "Send \"4\"" gemini-cli-send-4)
     ]])
 
 ;;;; add files to context
@@ -425,16 +424,16 @@ for each directory across multiple invocations.")
 (interactive)
 (let ((response (read-number "choose(1, 2, 3 or 4):" 1)))
 (cond
-         ((equal response 1)
-          (gemini-cli-send-1))
-         ((equal response 2)
-          (gemini-cli-send-2))
-         ((equal response 3)
-          (gemini-cli-send-3))
-         ((equal response 4)
-          (gemini-cli-send-4))
-         (t
-          (message "Unknown response: %s" response)))))
+ ((equal response 1)
+  (gemini-cli-send-1))
+ ((equal response 2)
+  (gemini-cli-send-2))
+ ((equal response 3)
+  (gemini-cli-send-3))
+ ((equal response 4)
+  (gemini-cli-send-4))
+ (t
+  (message "Unknown response: %s" response)))))
 
 ;;;; Slash Commands with popup menu
 (defun gemini-cli-slash-commands-popup ()
@@ -1538,12 +1537,7 @@ switch to Gemini buffer."
                      (when (yes-or-no-p "Buffer is large.  Send anyway? ")
                        (buffer-substring-no-properties (point-min) (point-max)))
                    (buffer-substring-no-properties (point-min) (point-max)))))
-         (prompt (cond
-                  ((equal arg '(4))     ; C-u
-                   (read-string "Instructions for Gemini: "))
-                  ((equal arg '(16))    ; C-u C-u
-                   (read-string "Instructions for Gemini: "))
-                  (t nil)))
+         (prompt (read-string "Instructions for Gemini: "))
          (full-text (if prompt
                         (format "%s\n\n%s" prompt text)
                       text)))
@@ -1654,11 +1648,11 @@ directories, allowing you to choose which one to switch to."
 With prefix ARG, switch to the Gemini buffer after sending CMD."
   (interactive)
   (let ((selected-buffer (gemini-cli--do-send-command
-                          (completing-read "Gemini Command: " '() nil nil nil nil ""))))
+                          (read-string "Prompt: "))))
     (when (and arg selected-buffer)
       (pop-to-buffer selected-buffer))))
 
-;;;###autoload
+;;;##autoload
 (defun gemini-cli-send-shell (cmd &optional arg)
   "Read a Gemini command from the minibuffer and send it.
 
@@ -1672,13 +1666,14 @@ With prefix ARG, switch to the Gemini buffer after sending CMD."
       (pop-to-buffer selected-buffer))))
 
 ;;;###autoload
-(defun gemini-cli-send-command-with-context (cmd &optional arg)
+(defun gemini-cli-send-command-with-context (&optional arg)
   "Read a Gemini command and send it with current file and line context.
 
 If region is active, include region line numbers.
 With prefix ARG, switch to the Gemini buffer after sending CMD."
-  (interactive "sGemini command: \nP")
-  (let* ((file-ref (if (use-region-p)
+  (interactive)
+  (let* ((cmd (read-string "Prompt:"))
+         (file-ref (if (use-region-p)
                        (gemini-cli--format-file-reference
                         nil
                         (line-number-at-pos (region-beginning))
@@ -1755,18 +1750,16 @@ FILE-PATH should be an absolute path to the file to send."
 (defun gemini-cli-send-buffer-file (&optional arg)
   "Send the file associated with current buffer to Gemini prefixed with `@'.
 
-With prefix ARG, prompt for instructions to add to the file before sending.
-With two prefix ARGs, both add instructions and switch to Gemini buffer."
+With prefix ARG, switch to the Gemini buffer after sending CMD."
   (interactive "P")
   (let ((file-path (gemini-cli--get-buffer-file-name)))
     (if file-path
-        (let* ((prompt (when arg
-                        (read-string "Instructions for Gemini: ")))
+        (let* ((prompt (read-string "Instructions for Gemini: "))
                (command (if prompt
                            (format "%s\n\n@%s" prompt file-path)
                          (format "@%s" file-path))))
           (let ((selected-buffer (gemini-cli--do-send-command command)))
-            (when (and (equal arg '(16)) selected-buffer) ; Only switch buffer with C-u C-u
+            (when (and arg selected-buffer)
               (pop-to-buffer selected-buffer))))
       (error "Current buffer is not associated with a file"))))
 
