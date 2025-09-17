@@ -51,6 +51,44 @@
   :type 'hook
   :group 'gemini-cli)
 
+(defcustom slash-commands
+  '(
+    "/help")
+  "List of slash commands available in Gemini."
+:type '(repeat (choice string (repeat string)))
+:group 'gemini-cli)
+
+(defcustom qwen-code-slash-commands
+  '(
+    "/about"
+    "/auth"
+    "/bug"
+    ("/chat" "/chat list" "/chat save" "/chat resume")
+    "/clear"
+    "/compress"
+    "/copy"
+    "/docs"
+    ("/directory" "/directory add" "/directory show")
+    "/editor"
+    "/extensions"
+    "/help"
+    "/ide"
+    "/init"
+    ("/mcp" "/mcp list" "/mcp auth" "/mcp refresh")
+    ("/memory" "/memory show""/memory add" "/memory refresh")
+    "/privacy"
+    "/quit"
+    ("/stats" "/stats model" "/stats tools")
+    "/theme"
+    "/tools"
+    "/settings"
+    "/vim"
+    "/setup-github"
+    "/terminal-setup")
+  "List of slash commands available in Gemini."
+:type '(repeat (choice string (repeat string)))
+:group 'gemini-cli)
+
 (defcustom gemini-cli-slash-commands
   '(
     "/about"
@@ -81,6 +119,44 @@
   "List of slash commands available in Gemini."
 :type '(repeat (choice string (repeat string)))
 :group 'gemini-cli)
+
+(defcustom claude-code-slash-commands
+  '(
+  "/add-dir"
+  "/agents"
+  "/bashes"
+  "/clear"
+  "/compact"
+  "/config"
+  "/cost"
+  "/doctor"
+  "/exit"
+  "/export"
+  "/help"
+  "/hooks"
+  "/ide"
+  "/init"
+  "/mcp"
+  "/memory"
+  "/migrate-installer"
+  "/model"
+  "/output-style"
+  "/output-style:new"
+  "/permissions"
+  "/pr-comments"
+  "/release-notes"
+  "/resume"
+  "/review"
+  "/security-review"
+  "/status"
+  "/statusline"
+  "/terminal-setup"
+  "/todos"
+  "/vim")
+  "List of slash commands available in Claude+Code."
+  :type '(repeat (choice string (repeat string)))
+  :group 'gemini-cli)
+
 
 (defcustom gemini-cli-startup-delay 0.1
   "Delay in seconds after starting Gemini before displaying buffer.
@@ -439,7 +515,7 @@ for each directory across multiple invocations.")
 (defun gemini-cli-slash-commands-popup ()
   "Display the Gemini slash commands menu."
   (interactive)
-  (let ((slash-cmd (popup-cascade-menu  gemini-cli-slash-commands)))
+  (let ((slash-cmd (popup-cascade-menu  slash-commands)))
   (gemini-cli--do-send-command slash-cmd)))
 
 ;;;; Terminal abstraction layer
@@ -1253,6 +1329,7 @@ With double prefix ARG (\\[universal-argument] \\[universal-argument]), prompt f
     (when switch-after
       (pop-to-buffer buffer))))
 
+(defvar supported-cli-tools '("gemini-cli" "claude-code" "qwen-code"))
 ;;;###autoload
 (defun gemini-cli (&optional arg)
   "Start Gemini in an eat terminal and enable `gemini-cli-mode'.
@@ -1265,6 +1342,10 @@ buffer file.
 With single prefix ARG (\\[universal-argument]), switch to buffer after creating.
 With double prefix ARG (\\[universal-argument] \\[universal-argument]), prompt for the project directory."
   (interactive "P")
+  (let ((tool (completing-read "Select CLI tool: " supported-cli-tools nil t)))
+  (setq gemini-cli-program (car (split-string tool "-")))
+  (setq slash-commands (symbol-value (intern (format "%s-slash-commands" tool))))
+  )
   (gemini-cli--start arg nil))
 
 ;;;###autoload
@@ -1873,6 +1954,7 @@ and managing Gemini sessions."
   :lighter " Gemini"
   :global t
   :group 'gemini-cli)
+
 
 ;;;; Provide the feature
 (provide 'gemini-cli)
