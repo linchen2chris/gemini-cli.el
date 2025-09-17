@@ -28,6 +28,10 @@ An Emacs interface for [Gemini CLI](https://blog.google/technology/developers/in
 - [Gemini CLI](https://github.com/google-gemini/gemini-cli) installed and configured
 - Required: transient (0.7.5+)
 - Optional: eat (0.9.2+) for eat backend, vterm for vterm backend
+- Note: If not using a `:vc` install, the `eat` package requires NonGNU ELPA:
+    ```elisp
+    (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/"))
+    ```
 
 ### Using builtin use-package (Emacs 30+)
 

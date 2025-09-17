@@ -1,9 +1,13 @@
 # Changelog
 
 All notable changes to claude-code.el will be documented in this file.
+## RoadMap
+Support multiple ai CLI tools
+- [ ] qwen code
+- [ ] ...
 
 ## [1.0.0]
-port claude code to gemini CLI
+totally support gemini-cli
 
 ### [0.4.3]
 
