@@ -1,10 +1,10 @@
 ;;; gemini-cli.el --- Gemini CLI Emacs integration -*- lexical-binding: t; -*-
 
-;; Author: Stephen Molitor <stevemolitor@gmail.com>
+;; Author: Lin Chen<lc1990linux@gmail.com>
 ;; Version: 0.2.0
 ;; Package-Requires: ((emacs "30.0") (transient "0.9.3"))
-;; Keywords: tools, ai
-;; URL: https://github.com/stevemolitor/gemini-cli.el
+
+;; URL: https://github.com/linchen2chris/gemini-cli.el
 
 ;;; Commentary:
 ;; An Emacs interface to Gemini CLI.  This package provides convenient
@@ -1537,7 +1537,10 @@ switch to Gemini buffer."
                      (when (yes-or-no-p "Buffer is large.  Send anyway? ")
                        (buffer-substring-no-properties (point-min) (point-max)))
                    (buffer-substring-no-properties (point-min) (point-max)))))
-         (prompt (read-string "Instructions for Gemini: "))
+         (prompt (cond
+                  ((equal arg '(4))     ; C-u
+                   (read-string "Instructions: "))
+                  (t nil)))
          (full-text (if prompt
                         (format "%s\n\n%s" prompt text)
                       text)))
@@ -1750,11 +1753,13 @@ FILE-PATH should be an absolute path to the file to send."
 (defun gemini-cli-send-buffer-file (&optional arg)
   "Send the file associated with current buffer to Gemini prefixed with `@'.
 
-With prefix ARG, switch to the Gemini buffer after sending CMD."
+With prefix ARG, prompt for instructions to add to the file before sending.
+With two prefix ARGs, both add instructions and switch to Gemini buffer."
   (interactive "P")
   (let ((file-path (gemini-cli--get-buffer-file-name)))
     (if file-path
-        (let* ((prompt (read-string "Instructions for Gemini: "))
+        (let* ((prompt (when arg
+                        (read-string "Instructions: ")))
                (command (if prompt
                            (format "%s\n\n@%s" prompt file-path)
                          (format "@%s" file-path))))
