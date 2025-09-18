@@ -1010,6 +1010,7 @@ Returns a list of buffer objects."
             (string= (file-truename (abbreviate-file-name directory))
                      (file-truename buf-dir)))))
    (gemini-cli--find-all-gemini-buffers)))
+   ;; (cl-remove-if-not (lambda (buf) (get-buffer-window buf)) (gemini-cli--find-all-gemini-buffers)))) this will only choose the displayed buffers
 
 (defun gemini-cli--extract-directory-from-buffer-name (buffer-name)
   "Extract the directory path from a Gemini BUFFER-NAME.
@@ -1056,6 +1057,7 @@ If SIMPLE-FORMAT is non-nil, use just the instance name as display name."
                                   (gemini-cli--buffer-display-name buf))))
               (cons display-name buf)))
           buffers))
+          ;;(cl-remove-if-not (lambda (buf) (get-buffer-window buf)) buffers))) -- this will only choose the displayed buffers
 
 (defun gemini-cli--select-buffer-from-choices (prompt buffers &optional simple-format)
   "Prompt user to select a buffer from BUFFERS list using PROMPT.
@@ -1329,7 +1331,10 @@ With double prefix ARG (\\[universal-argument] \\[universal-argument]), prompt f
     (when switch-after
       (pop-to-buffer buffer))))
 
-(defvar supported-cli-tools '("gemini-cli" "claude-code" "qwen-code"))
+(defvar gemini-cli-shown-instances nil
+  "List of Gemini instances shown in the last prompt.")
+
+(defconst gemini-cli-supported-cli-tools '(("gemini-cli" "claude-code" "qwen-code"))
 ;;;###autoload
 (defun gemini-cli (&optional arg)
   "Start Gemini in an eat terminal and enable `gemini-cli-mode'.
@@ -1342,7 +1347,7 @@ buffer file.
 With single prefix ARG (\\[universal-argument]), switch to buffer after creating.
 With double prefix ARG (\\[universal-argument] \\[universal-argument]), prompt for the project directory."
   (interactive "P")
-  (let ((tool (completing-read "Select CLI tool: " supported-cli-tools nil t)))
+  (let ((tool (completing-read "Select CLI tool: " gemini-cli-supported-cli-tools nil t)))
   (setq gemini-cli-program (car (split-string tool "-")))
   (setq slash-commands (symbol-value (intern (format "%s-slash-commands" tool))))
   )
