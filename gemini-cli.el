@@ -1250,24 +1250,25 @@ With double prefix ARG (\\[universal-argument] \\[universal-argument]), prompt f
          (default-directory dir)
          ;; Check for existing Gemini instances in this directory
          (existing-buffers (gemini-cli--find-gemini-buffers-for-directory dir))
-         ;; Get existing instance names
-         (existing-instance-names (mapcar (lambda (buf)
+
+         ;; Start the terminal process
+         (buffer (if existing-buffers
+                     (car existing-buffers)
+                   (progn
+                     (let* ((existing-instance-names (mapcar (lambda (buf)
                                             (or (gemini-cli--extract-instance-name-from-buffer-name
                                                  (buffer-name buf))
                                                 "default"))
                                           existing-buffers))
-         ;; Prompt for instance name (only if instances exist, or force-prompt is true)
-         (instance-name (gemini-cli--prompt-for-instance-name dir existing-instance-names force-prompt))
-         (buffer-name (gemini-cli--buffer-name instance-name))
-         (program-switches (if extra-switches
-                               (append gemini-cli-program-switches extra-switches)
-                             gemini-cli-program-switches))
-
-         ;; Set process-adaptive-read-buffering to nil to avoid flickering while Gemini is processing
-         (process-adaptive-read-buffering nil)
-
-         ;; Start the terminal process
-         (buffer (gemini-cli--term-make gemini-cli-terminal-backend buffer-name gemini-cli-program program-switches)))
+                            ;; Prompt for instance name (only if instances exist, or force-prompt is true)
+                            (instance-name (gemini-cli--prompt-for-instance-name dir existing-instance-names force-prompt))
+                            (buffer-name (gemini-cli--buffer-name instance-name))
+                            (program-switches (if extra-switches
+                                                  (append gemini-cli-program-switches extra-switches)
+                                                gemini-cli-program-switches))
+                            ;; Set process-adaptive-read-buffering to nil to avoid flickering while Gemini is processing
+                            (process-adaptive-read-buffering nil))
+                       (gemini-cli--term-make gemini-cli-terminal-backend buffer-name gemini-cli-program program-switches))))))
 
     ;; Check if the gemini program is available
     (unless (executable-find gemini-cli-program)
@@ -1333,7 +1334,8 @@ With double prefix ARG (\\[universal-argument] \\[universal-argument]), prompt f
 (defvar gemini-cli-shown-instances nil
   "List of Gemini instances shown in the last prompt.")
 
-(defconst gemini-cli-supported-cli-tools '(("gemini-cli" "claude-code" "qwen-code")))
+(defconst gemini-cli-supported-cli-tools '("gemini-cli" "claude-code" "qwen-code"))
+
 ;;;###autoload
 (defun gemini-cli (&optional arg)
   "Start Gemini in an eat terminal and enable `gemini-cli-mode'.
@@ -1346,11 +1348,14 @@ buffer file.
 With single prefix ARG (\\[universal-argument]), switch to buffer after creating.
 With double prefix ARG (\\[universal-argument] \\[universal-argument]), prompt for the project directory."
   (interactive "P")
-  (let ((tool (completing-read "Select CLI tool: " gemini-cli-supported-cli-tools nil t)))
-  (setq gemini-cli-program (car (split-string tool "-")))
-  (setq slash-commands (symbol-value (intern (format "%s-slash-commands" tool))))
-  )
-  (gemini-cli--start arg nil))
+  (let* ((dir (gemini-cli--directory))
+         (existing-buffers (gemini-cli--find-gemini-buffers-for-directory dir)))
+    (if existing-buffers
+        (gemini-cli-toggle)
+        (let ((tool (completing-read "Select CLI tool: " gemini-cli-supported-cli-tools nil t)))
+          (setq gemini-cli-program (car (split-string tool "-")))
+          (setq slash-commands (symbol-value (intern (format "%s-slash-commands" tool))))
+          (gemini-cli--start arg nil)))))
 
 ;;;###autoload
 (defun gemini-cli-start-in-directory (&optional arg)
