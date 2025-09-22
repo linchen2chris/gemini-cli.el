@@ -157,7 +157,6 @@
   :type '(repeat (choice string (repeat string)))
   :group 'gemini-cli)
 
-
 (defcustom gemini-cli-startup-delay 0.1
   "Delay in seconds after starting Gemini before displaying buffer.
 
@@ -1334,7 +1333,7 @@ With double prefix ARG (\\[universal-argument] \\[universal-argument]), prompt f
 (defvar gemini-cli-shown-instances nil
   "List of Gemini instances shown in the last prompt.")
 
-(defconst gemini-cli-supported-cli-tools '(("gemini-cli" "claude-code" "qwen-code"))
+(defconst gemini-cli-supported-cli-tools '(("gemini-cli" "claude-code" "qwen-code")))
 ;;;###autoload
 (defun gemini-cli (&optional arg)
   "Start Gemini in an eat terminal and enable `gemini-cli-mode'.
