@@ -46,7 +46,8 @@ An Emacs interface for [Gemini CLI](https://blog.google/technology/developers/in
 
 ;; for vterm terminal backend:
 (use-package vterm :ensure t)
-
+;; for slash commands popup
+(use-package popup :ensure t)
 ;; install gemini-cli.el
 (use-package gemini-cli :ensure t
   :vc (:url "https://github.com/linchen2chris/gemini-cli.el" :rev :newest)
@@ -71,6 +72,8 @@ An Emacs interface for [Gemini CLI](https://blog.google/technology/developers/in
 ;; for vterm terminal backend:
 (use-package vterm :straight t)
 
+;; for slash commands popup
+(use-package popup :ensure t)
 (use-package gemini-cli
   :straight (:type git :host github :repo "linchen2chris/gemini-cli.el" :branch "main"
                    :files ("*.el" (:exclude "demo.gif")))
